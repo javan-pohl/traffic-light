@@ -5,7 +5,6 @@ export default function fetchLight() {
     axios
       .get("https://traffic-light-api.herokuapp.com/")
       .then((data) => {
-        console.log("got data");
         resolve(data);
       })
       .catch((err) => {

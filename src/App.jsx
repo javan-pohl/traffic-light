@@ -8,7 +8,7 @@ import "./styles.scss";
 
 export default function App() {
   const [color, setColor] = useState("white");
-  const [colorNum, setColorNum] = useState(0);
+  const [colorNum, setColorNum] = useState(2);
   const [cycleCount, setCycleCount] = useState(0);
   const [cycleTimingMs, setCycleTimingMs] = useState(500);
   const [init, setInit] = useState(false);
@@ -34,8 +34,8 @@ export default function App() {
   const cycleLights = () => {
     let i = colorNum;
     let c = cycleCount;
-    setColor(colors[i]);
     setColorNum(i >= colors.length - 1 ? (i = 0) : (i += 1));
+    setColor(colors[i]);
     setCycleCount((c += 1));
   };
 
