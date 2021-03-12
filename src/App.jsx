@@ -95,6 +95,7 @@ export default function App() {
           truthTest={isCycling}
           falseText={"Start Light Cycle"}
           trueText={"Stop Light Cycle"}
+          trueClassName={"red"}
         />
       </div>
     </div>

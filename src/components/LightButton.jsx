@@ -4,21 +4,22 @@ export default function LightButton({
   onClick,
   truthTest,
   falseText,
-  trueText
+  trueText,
+  falseClassName = { falseClassName: "light-green" },
+  trueClassName = { trueClassName: "" }
 }) {
   const buttonText = () => {
+    const trueCss = "change-button " + trueClassName;
+    const falseCss = "change-button " + falseClassName;
     if (truthTest) {
       return (
-        <div
-          className="change-button pulsing-continous"
-          onClick={() => onClick()}
-        >
+        <div className={trueCss} onClick={() => onClick()}>
           {trueText}
         </div>
       );
     } else {
       return (
-        <div className="change-button" onClick={() => onClick()}>
+        <div className={falseCss} onClick={() => onClick()}>
           {falseText}
         </div>
       );
