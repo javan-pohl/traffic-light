@@ -4,16 +4,17 @@ export default function ChangeButton({ getColor, isLoading }) {
   const buttonText = () => {
     if (isLoading) {
       return (
-        <div className="change-button" onClick={() => getColor()}>
+        <div
+          className="change-button pulsing-continous"
+          onClick={() => getColor()}
+        >
           Loading...
         </div>
       );
     } else {
       return (
         <div className="change-button" onClick={() => getColor()}>
-          <p>
-            Get <br /> Random <br /> Color
-          </p>
+          Get Random Color
         </div>
       );
     }
