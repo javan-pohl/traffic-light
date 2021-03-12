@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LightButton from "./components/LightButton";
 import LightModule from "./components/LightModule";
 import { colors } from "./colors";
@@ -8,30 +8,33 @@ import "./styles.scss";
 
 export default function App() {
   const [color, setColor] = useState("white");
+  const [cycleNum, setCycleNum] = useState(0);
   const [cycleTimingMs, setCycleTimingMs] = useState(500);
   const [init, setInit] = useState(false);
-  const [isCycling, setIsCycling] = useState(true);
+  const [isCycling, setIsCycling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // cycleLights();
+    if (isCycling) {
+      setTimeout(cycleLights, cycleTimingMs);
+    }
+  });
 
   async function cycleLights() {
     console.log("isCycling: ", isCycling);
-    let i = 0;
-    while (isCycling) {
-      if (i >= color.length) {
+    if (isCycling) {
+      let i = cycleNum;
+      if (i >= colors.length) {
         i = 0;
       }
       setColor(colors[i]);
-      await setTimeout(cycleTimingMs);
-      i += 1;
+      setCycleNum((i += 1));
     }
   }
+
   const handleCycleClick = () => {
-    if (isCycling) {
-      setIsCycling(false);
-    } else {
-      setIsCycling(true);
-      cycleLights();
-    }
+    setIsCycling(!isCycling);
   };
 
   const handleChangeColor = () => {
