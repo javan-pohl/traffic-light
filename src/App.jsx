@@ -52,15 +52,16 @@ export default function App() {
     }
   };
 
-  const handleChangeColor = () => {
+  const handleChangeClick = () => {
+    clearTimeout(myTimeOut.current);
     setIsCycling(false);
     setCycleCount(0);
     setColor("white");
     setIsLoading(true);
-    handleChangeColor2();
+    handleChangeClick2();
   };
 
-  const handleChangeColor2 = () => {
+  const handleChangeClick2 = () => {
     fetchLight()
       .then((color) => {
         setColor(color.data.color);
@@ -73,6 +74,7 @@ export default function App() {
   const handleInitClick = () => {
     if (!init) {
       let newColor = getRandomColor();
+      setColorNum(colors.indexOf(newColor));
       setColor(newColor);
       setInit(true);
     }
@@ -83,7 +85,7 @@ export default function App() {
       <LightModule lightModClick={handleInitClick} color={color} />
       <div className="buttons">
         <LightButton
-          onClick={handleChangeColor}
+          onClick={handleChangeClick}
           truthTest={isLoading}
           falseText={"Get Color From API"}
           trueText={"Loading ..."}
