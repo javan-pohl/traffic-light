@@ -34,7 +34,8 @@ export default function App() {
   const cycleLights = () => {
     let i = colorNum;
     let c = cycleCount;
-    setColorNum(i >= colors.length - 1 ? (i = 0) : (i += 1));
+    // setColorNum(i >= colors.length - 1 ? (i = 0) : (i += 1));
+    setColorNum(i <= 0 ? (i = colors.length - 1) : (i -= 1));
     setColor(colors[i]);
     setCycleCount((c += 1));
   };

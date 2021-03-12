@@ -21,7 +21,7 @@ body {
   flex-direction: column;
   justify-content: space-evenly;
 }
-.change-button {
+.button {
   padding: 15px 25px;
   width: 150px;
   font-size: 16px;
@@ -34,9 +34,9 @@ body {
   border-radius: 15px;
   box-shadow: 0 9px #999;
 }
-.change-button:hover {background-color: #3e8e41}
+.button:hover {background-color: #3e8e41}
 
-.change-button:active {
+.button:active {
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
@@ -79,33 +79,6 @@ body {
 }
 .white {
   background-color: white;
-}
-
-@-webkit-keyframes pulse {
-  0% {
-    -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-  }
-  70% {
-      -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-  }
-  100% {
-      -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-    box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-  }
-  70% {
-      -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-      box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-  }
-  100% {
-      -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-      box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-  }
 }
 
 @media only screen and (max-width: 600px){

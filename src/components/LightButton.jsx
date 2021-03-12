@@ -9,8 +9,8 @@ export default function LightButton({
   trueClassName = { trueClassName: "" }
 }) {
   const buttonText = () => {
-    const trueCss = "change-button " + trueClassName;
-    const falseCss = "change-button " + falseClassName;
+    const trueCss = "button " + trueClassName;
+    const falseCss = "button " + falseClassName;
     if (truthTest) {
       return (
         <div className={trueCss} onClick={() => onClick()}>
