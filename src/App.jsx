@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import LightButton from "./components/LightButton";
 import LightModule from "./components/LightModule";
 import { colors } from "./colors";
@@ -10,12 +10,10 @@ export default function App() {
   const [color, setColor] = useState("white");
   const [colorNum, setColorNum] = useState(2);
   const [cycleCount, setCycleCount] = useState(0);
-  const [cycleTimingMs, setCycleTimingMs] = useState(500);
+  const [inApiMode, setInApiMode] = useState(true);
   const [init, setInit] = useState(false);
-  const [isCycling, setIsCycling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [serverAwake, setServerAwake] = useState(false);
-  const myTimeOut = useRef(null);
 
   useEffect(() => {
     if (!serverAwake) {
@@ -23,46 +21,15 @@ export default function App() {
         .then(() => setServerAwake(true))
         .catch((err) => console.log("fetchLight err: ", err));
     }
-    if (isCycling && cycleCount === 0) {
-      cycleLights();
-    } else if (isCycling && cycleCount > 0) {
-      myTimeOut.current = cycleLightsTimeout();
-    }
-    return () => clearTimeout(myTimeOut.current);
   });
 
-  const cycleLights = () => {
-    let i = colorNum;
-    let c = cycleCount;
-    // setColorNum(i >= colors.length - 1 ? (i = 0) : (i += 1));
-    setColorNum(i <= 0 ? (i = colors.length - 1) : (i -= 1));
-    setColor(colors[i]);
-    setCycleCount((c += 1));
-  };
-
-  const cycleLightsTimeout = () => setTimeout(cycleLights, cycleTimingMs);
-
-  const handleCycleClick = () => {
-    clearTimeout(myTimeOut.current);
-    if (isCycling) {
-      setIsCycling(false);
-      setCycleCount(0);
-    } else {
-      setIsCycling(true);
-      setCycleCount(0);
-    }
-  };
-
-  const handleChangeClick = () => {
-    clearTimeout(myTimeOut.current);
-    setIsCycling(false);
-    setCycleCount(0);
+  const handleApiClick = () => {
     setColor("white");
     setIsLoading(true);
-    handleChangeClick2();
+    handleApiClick2();
   };
 
-  const handleChangeClick2 = () => {
+  const handleApiClick2 = () => {
     fetchLight()
       .then((color) => {
         setColor(color.data.color);
@@ -70,6 +37,14 @@ export default function App() {
         setIsLoading(false);
       })
       .catch((err) => console.log("fetchLight error: ", err));
+  };
+
+  const handleCycleClick = () => {
+    let c = cycleCount;
+    let i = c === 0 ? (color === "green" ? 1 : 2) : colorNum;
+    setColor(colors[i]);
+    setColorNum(i <= 0 ? (i = colors.length - 1) : (i -= 1));
+    setCycleCount((c += 1));
   };
 
   const handleInitClick = () => {
@@ -81,23 +56,45 @@ export default function App() {
     }
   };
 
+  const handleModeClick = () => {
+    setInApiMode(!inApiMode);
+    setCycleCount(0);
+  };
+
+  const renderButton = () => {
+    if (inApiMode) {
+      return (
+        <LightButton
+          onClick={handleApiClick}
+          truthTest={isLoading}
+          trueText={"Loading..."}
+          falseText={"Get API Color"}
+          trueClassName={"red"}
+        />
+      );
+    } else {
+      return (
+        <LightButton
+          onClick={handleCycleClick}
+          truthTest={true}
+          trueText={"Click to Cycle Colors"}
+          trueClassName={"red"}
+        />
+      );
+    }
+  };
+
   return (
     <div className="main">
       <LightModule lightModClick={handleInitClick} color={color} />
       <div className="buttons">
         <LightButton
-          onClick={handleChangeClick}
-          truthTest={isLoading}
-          falseText={"Get Color From API"}
-          trueText={"Loading ..."}
+          onClick={handleModeClick}
+          truthTest={inApiMode}
+          falseText={"Switch to API Mode"}
+          trueText={"Switch to Manual Mode"}
         />
-        <LightButton
-          onClick={handleCycleClick}
-          truthTest={isCycling}
-          falseText={"Start Light Cycle"}
-          trueText={"Stop Light Cycle"}
-          trueClassName={"red"}
-        />
+        {renderButton()}
       </div>
     </div>
   );
