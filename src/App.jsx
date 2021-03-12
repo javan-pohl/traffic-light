@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import LightButton from "./components/LightButton";
 import LightModule from "./components/LightModule";
 import { colors } from "./colors";
@@ -8,36 +8,53 @@ import "./styles.scss";
 
 export default function App() {
   const [color, setColor] = useState("white");
-  const [cycleNum, setCycleNum] = useState(0);
+  const [colorNum, setColorNum] = useState(0);
+  const [cycleCount, setCycleCount] = useState(0);
   const [cycleTimingMs, setCycleTimingMs] = useState(500);
   const [init, setInit] = useState(false);
   const [isCycling, setIsCycling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [serverAwake, setServerAwake] = useState(false);
+  const myTimeOut = useRef(null);
 
   useEffect(() => {
-    // cycleLights();
-    if (isCycling) {
-      setTimeout(cycleLights, cycleTimingMs);
+    if (!serverAwake) {
+      fetchLight()
+        .then(() => setServerAwake(true))
+        .catch((err) => console.log("fetchLight err: ", err));
     }
+    if (isCycling && cycleCount === 0) {
+      cycleLights();
+    } else if (isCycling && cycleCount > 0) {
+      myTimeOut.current = cycleLightsTimeout();
+    }
+    return () => clearTimeout(myTimeOut.current);
   });
 
-  async function cycleLights() {
-    console.log("isCycling: ", isCycling);
-    if (isCycling) {
-      let i = cycleNum;
-      if (i >= colors.length) {
-        i = 0;
-      }
-      setColor(colors[i]);
-      setCycleNum((i += 1));
-    }
-  }
+  const cycleLights = () => {
+    let i = colorNum;
+    let c = cycleCount;
+    setColor(colors[i]);
+    setColorNum(i >= colors.length - 1 ? (i = 0) : (i += 1));
+    setCycleCount((c += 1));
+  };
+
+  const cycleLightsTimeout = () => setTimeout(cycleLights, cycleTimingMs);
 
   const handleCycleClick = () => {
-    setIsCycling(!isCycling);
+    clearTimeout(myTimeOut.current);
+    if (isCycling) {
+      setIsCycling(false);
+      setCycleCount(0);
+    } else {
+      setIsCycling(true);
+      setCycleCount(0);
+    }
   };
 
   const handleChangeColor = () => {
+    setIsCycling(false);
+    setCycleCount(0);
     setColor("white");
     setIsLoading(true);
     handleChangeColor2();
@@ -47,12 +64,13 @@ export default function App() {
     fetchLight()
       .then((color) => {
         setColor(color.data.color);
+        setColorNum(colors.indexOf(color.data.color));
         setIsLoading(false);
       })
       .catch((err) => console.log("fetchLight error: ", err));
   };
+
   const handleInitClick = () => {
-    fetchLight(); //to wake-up the server
     if (!init) {
       let newColor = getRandomColor();
       setColor(newColor);
@@ -67,7 +85,7 @@ export default function App() {
         <LightButton
           onClick={handleChangeColor}
           truthTest={isLoading}
-          falseText={"Get Random Color"}
+          falseText={"Get Color From API"}
           trueText={"Loading ..."}
         />
         <LightButton
