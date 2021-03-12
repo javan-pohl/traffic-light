@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function LightModule({ color, lightModClick }) {
-  const isRed = () => (color === "red" ? "light red" : "light white");
-  const isYellow = () => (color === "yellow" ? "light yellow" : "light white");
-  const isGreen = () => (color === "green" ? "light green" : "light white");
+  const isRed = () =>
+    color === "red" ? "light red pulse-red pulse" : "light white";
+  const isYellow = () =>
+    color === "yellow" ? "light yellow pulse-yellow pulse" : "light white";
+  const isGreen = () =>
+    color === "green" ? "light green pulse-green pulse" : "light white";
 
   return (
     <div className="light-module" onClick={() => lightModClick()}>

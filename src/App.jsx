@@ -8,13 +8,24 @@ import "./styles.scss";
 export default function App() {
   const [color, setColor] = useState("white");
   const [init, setInit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  async function handleChangeColor() {
+  const handleChangeColor = () => {
+    setColor("white");
+    setIsLoading(true);
+    handleChangeColor2();
+  };
+
+  const handleChangeColor2 = () => {
     fetchLight()
-      .then((color) => setColor(color.data.color))
+      .then((color) => {
+        setColor(color.data.color);
+        setIsLoading(false);
+      })
       .catch((err) => console.log("fetchLight error: ", err));
-  }
+  };
   const handleInitClick = () => {
+    fetchLight(); //to wake-up the server
     if (!init) {
       let newColor = getRandomColor();
       setColor(newColor);
@@ -26,7 +37,7 @@ export default function App() {
     <div className="main">
       <LightModule lightModClick={handleInitClick} color={color} />
       <div className="buttons">
-        <ChangeButton getColor={handleChangeColor} />
+        <ChangeButton getColor={handleChangeColor} isLoading={isLoading} />
       </div>
     </div>
   );

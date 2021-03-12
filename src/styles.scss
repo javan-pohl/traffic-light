@@ -12,6 +12,7 @@ body {
   margin: auto;
   display: flex;
   flex-direction: row;
+  z-index: -1;
 }
 .buttons {
   width: auto;
@@ -19,6 +20,40 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+}
+.change-button {
+  text-align: center;
+  padding: 10px;
+  border-radius: 50%;
+  background: #2cc1cc;  
+}
+.pulse-red {
+  box-shadow: 0 0 0 rgba(204, 44, 44, 0.4);
+  animation: pulse 1s 1;
+}
+.pulse-yellow {
+  box-shadow: 0 0 0 rgba(204, 201, 44, 0.4);
+  animation: pulse 1s 1;
+}
+.pulse-green {
+  box-shadow: 0 0 0 rgba(76, 204, 44, 0.4);
+  animation: pulse 1s 1;
+}
+.pulse-red2 {
+  box-shadow: 0 0 0 rgba(204, 44, 44, 0.4);
+  animation: pulse 1s 1;
+}
+.pulse-yellow2 {
+  box-shadow: 0 0 0 rgba(204, 201, 44, 0.4);
+  animation: pulse 1s 1;
+}
+.pulse-green2 {
+  box-shadow: 0 0 0 rgba(76, 204, 44, 0.4);
+  animation: pulse 1s 1;
+}
+.pulse {
+  box-shadow: 0 0 0 rgba(76, 204, 44, 0.4);
+  animation: pulse 2s 1;
 }
 .light-module {
   display: flex;
@@ -53,5 +88,57 @@ body {
   background-color: white;
 }
 
+
+@-webkit-keyframes pulse {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+  }
+  70% {
+      -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+  }
+  100% {
+      -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+  }
+}
+@keyframes pulse {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+  }
+  70% {
+      -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+      box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+  }
+  100% {
+      -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+      box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+  }
+}
+
+@-webkit-keyframes pulse-red {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(204, 44, 44, 0.4);
+  }
+  70% {
+      -webkit-box-shadow: 0 0 0 10px rgba(204, 44, 44, 0.4);
+  }
+  100% {
+      -webkit-box-shadow: 0 0 0 0 rgba(204, 44, 44, 0.4);
+  }
+}
+@keyframes pulse-red {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(204, 44, 44, 0.4);
+    box-shadow: 0 0 0 0 rgba(204, 44, 44, 0.4);
+  }
+  70% {
+      -moz-box-shadow: 0 0 0 10px rgba(204, 44, 44, 0.4);
+      box-shadow: 0 0 0 10px rgba(204, 44, 44, 0.4);
+  }
+  100% {
+      -moz-box-shadow: 0 0 0 0 rgba(204, 44, 44, 0.4);
+      box-shadow: 0 0 0 0 rgba(204, 44, 44, 0.4);
+  }
+}
 
  
