@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import LightButton from "./components/LightButton";
 import LightModule from "./components/LightModule";
 import { colors } from "./colors";
@@ -10,10 +10,13 @@ export default function App() {
   const [color, setColor] = useState("white");
   const [colorNum, setColorNum] = useState(2);
   const [cycleCount, setCycleCount] = useState(0);
+  const [cycleTimingMs, setCycleTimingMs] = useState(50);
   const [inApiMode, setInApiMode] = useState(true);
   const [init, setInit] = useState(false);
+  const [isCycling, setIsCycling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [serverAwake, setServerAwake] = useState(false);
+  const myTimeOut = useRef(null);
 
   useEffect(() => {
     if (!serverAwake) {
@@ -21,19 +24,29 @@ export default function App() {
         .then(() => setServerAwake(true))
         .catch((err) => console.log("fetchLight err: ", err));
     }
+    if (isCycling && cycleCount === 0) {
+      handleCycleClick();
+    } else if (isCycling && cycleCount > 0) {
+      myTimeOut.current = autoCycle();
+    }
+    return () => clearTimeout(myTimeOut.current);
   });
 
-  const handleApiClick = () => {
+  const autoCycle = () => setTimeout(handleCycleClick, cycleTimingMs);
+
+  const handleChangeClick = () => {
+    setIsCycling(true);
     setColor("white");
     setIsLoading(true);
-    handleApiClick2();
+    handleChangeClick2();
   };
 
-  const handleApiClick2 = () => {
+  const handleChangeClick2 = () => {
     fetchLight()
       .then((color) => {
         setColor(color.data.color);
         setColorNum(colors.indexOf(color.data.color));
+        setIsCycling(false);
         setIsLoading(false);
       })
       .catch((err) => console.log("fetchLight error: ", err));
@@ -42,8 +55,8 @@ export default function App() {
   const handleCycleClick = () => {
     let c = cycleCount;
     let i = c === 0 ? (color === "green" ? 1 : 2) : colorNum;
-    setColor(colors[i]);
     setColorNum(i <= 0 ? (i = colors.length - 1) : (i -= 1));
+    setColor(colors[i]);
     setCycleCount((c += 1));
   };
 
@@ -58,17 +71,16 @@ export default function App() {
 
   const handleModeClick = () => {
     setInApiMode(!inApiMode);
-    setCycleCount(0);
   };
 
   const renderButton = () => {
     if (inApiMode) {
       return (
         <LightButton
-          onClick={handleApiClick}
+          onClick={handleChangeClick}
           truthTest={isLoading}
           trueText={"Loading..."}
-          falseText={"Get API Color"}
+          falseText={"Change!"}
           trueClassName={"red"}
         />
       );
@@ -77,7 +89,7 @@ export default function App() {
         <LightButton
           onClick={handleCycleClick}
           truthTest={true}
-          trueText={"Click to Cycle Colors"}
+          trueText={"Cycle Through Colors"}
           trueClassName={"red"}
         />
       );
