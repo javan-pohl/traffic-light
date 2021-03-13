@@ -10,10 +10,10 @@ export default function App() {
   const [color, setColor] = useState("white");
   const [colorNum, setColorNum] = useState(2);
   const [cycleCount, setCycleCount] = useState(0);
-  const [cycleTimingMs, setCycleTimingMs] = useState(50);
+  const [cycleTimingMs] = useState(50);
   const [inApiMode, setInApiMode] = useState(true);
   const [init, setInit] = useState(false);
-  const [isCycling, setIsCycling] = useState(false);
+  const [isAutoCycling, setisAutoCycling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [serverAwake, setServerAwake] = useState(false);
   const myTimeOut = useRef(null);
@@ -24,9 +24,9 @@ export default function App() {
         .then(() => setServerAwake(true))
         .catch((err) => console.log("fetchLight err: ", err));
     }
-    if (isCycling && cycleCount === 0) {
+    if (isAutoCycling && cycleCount === 0) {
       handleCycleClick();
-    } else if (isCycling && cycleCount > 0) {
+    } else if (isAutoCycling && cycleCount > 0) {
       myTimeOut.current = autoCycle();
     }
     return () => clearTimeout(myTimeOut.current);
@@ -35,7 +35,7 @@ export default function App() {
   const autoCycle = () => setTimeout(handleCycleClick, cycleTimingMs);
 
   const handleChangeClick = () => {
-    setIsCycling(true);
+    setisAutoCycling(true);
     setColor("white");
     setIsLoading(true);
     handleChangeClick2();
@@ -46,7 +46,7 @@ export default function App() {
       .then((color) => {
         setColor(color.data.color);
         setColorNum(colors.indexOf(color.data.color));
-        setIsCycling(false);
+        setisAutoCycling(false);
         setIsLoading(false);
       })
       .catch((err) => console.log("fetchLight error: ", err));
@@ -54,7 +54,7 @@ export default function App() {
 
   const handleCycleClick = () => {
     let c = cycleCount;
-    let i = c === 0 ? (color === "green" ? 1 : 2) : colorNum;
+    let i = c === 0 ? (color === "green" ? 2 : 3) : colorNum;
     setColorNum(i <= 0 ? (i = colors.length - 1) : (i -= 1));
     setColor(colors[i]);
     setCycleCount((c += 1));
@@ -70,6 +70,8 @@ export default function App() {
   };
 
   const handleModeClick = () => {
+    setisAutoCycling(false);
+    setIsLoading(false);
     setInApiMode(!inApiMode);
   };
 
