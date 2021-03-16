@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function LightButton({
+  active,
   onClick,
   truthTest,
   falseText,
@@ -12,9 +13,13 @@ export default function LightButton({
     const trueCss = "button " + trueClassName;
     const falseCss = "button " + falseClassName;
     return (
-      <div className={truthTest ? trueCss : falseCss} onClick={() => onClick()}>
+      <button
+        disabled={!active}
+        className={truthTest ? trueCss : falseCss}
+        onClick={active ? () => onClick() : null}
+      >
         {truthTest ? trueText : falseText}
-      </div>
+      </button>
     );
   };
   return <React.Fragment>{buttonText()}</React.Fragment>;

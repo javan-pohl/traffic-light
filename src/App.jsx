@@ -75,24 +75,33 @@ export default function App() {
     setInApiMode(!inApiMode);
   };
 
-  const renderButton = () => {
-    if (inApiMode) {
+  const renderButtons = () => {
+    if (init) {
       return (
-        <LightButton
-          onClick={handleChangeClick}
-          truthTest={isLoading}
-          trueText={"Loading..."}
-          falseText={"Change!"}
-          trueClassName={"red"}
-        />
+        <React.Fragment>
+          <LightButton
+            active={init}
+            onClick={handleModeClick}
+            truthTest={inApiMode}
+            falseText={"Switch to API Mode"}
+            trueText={"Switch to Manual Mode"}
+          />
+          <LightButton
+            active={init}
+            onClick={inApiMode ? handleChangeClick : handleCycleClick}
+            truthTest={inApiMode ? isLoading : true}
+            trueText={inApiMode ? "Loading..." : "Cycle Through Colors"}
+            falseText={inApiMode ? "Change!" : ""}
+            trueClassName={"red"}
+          />
+        </React.Fragment>
       );
     } else {
       return (
         <LightButton
-          onClick={handleCycleClick}
-          truthTest={true}
-          trueText={"Cycle Through Colors"}
-          trueClassName={"red"}
+          active={init}
+          falseText={"Click on Stoplight to Initiate"}
+          falseClassName={"yellow black-text no-hover"}
         />
       );
     }
@@ -101,15 +110,7 @@ export default function App() {
   return (
     <div className="main">
       <LightModule lightModClick={handleInitClick} color={color} />
-      <div className="buttons">
-        <LightButton
-          onClick={handleModeClick}
-          truthTest={inApiMode}
-          falseText={"Switch to API Mode"}
-          trueText={"Switch to Manual Mode"}
-        />
-        {renderButton()}
-      </div>
+      <div className="buttons">{renderButtons()}</div>
     </div>
   );
 }
