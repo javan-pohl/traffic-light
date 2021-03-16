@@ -11,19 +11,11 @@ export default function LightButton({
   const buttonText = () => {
     const trueCss = "button " + trueClassName;
     const falseCss = "button " + falseClassName;
-    if (truthTest) {
-      return (
-        <div className={trueCss} onClick={() => onClick()}>
-          {trueText}
-        </div>
-      );
-    } else {
-      return (
-        <div className={falseCss} onClick={() => onClick()}>
-          {falseText}
-        </div>
-      );
-    }
+    return (
+      <div className={truthTest ? trueCss : falseCss} onClick={() => onClick()}>
+        {truthTest ? trueText : falseText}
+      </div>
+    );
   };
   return <React.Fragment>{buttonText()}</React.Fragment>;
 }
