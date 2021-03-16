@@ -44,8 +44,8 @@ export default function App() {
   const handleChangeClick2 = () => {
     fetchLight()
       .then((color) => {
-        setColor(color.data.color);
-        setColorNum(colors.indexOf(color.data.color));
+        setColor(color);
+        setColorNum(colors.indexOf(color));
         setisAutoCycling(false);
         setIsLoading(false);
       })
